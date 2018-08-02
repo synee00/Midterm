@@ -7,7 +7,7 @@ public class Story {
 				+ "dwelt an immortal named Kai-Yun and his trusty band of ninja monkeys.");
 		
 		//Start story here
-		
+		System.out.println("The crew of monkeys were called Bananjas and the crew leaders were: Toby, Saru-chan and Plum.");
 		
 	}
 
