@@ -1,9 +1,12 @@
+/*Jasmine Allen, Brian Seyferth, Sharde Smith
+ * Program: User can buy items for store
+ * August 3, 2018
+ */
+
+
 import java.util.*;
 import java.util.List;
 public class JBSGroceryApp {
-
-	private static String format;
-
 
 	public static void main(String[] args) {
 		//Create new array lift for inventory 
@@ -13,72 +16,68 @@ public class JBSGroceryApp {
 		ArrayList<Integer> cartQuantity = new ArrayList <Integer>();
 		String appRestart = "yes";
 		String isShopping = "yes";
-		double subtotal;
-		double grandTotal;
-		String paymentType = null;
 		String choice = null;
 		
 		//fill inventory
 		//ogInventory.add(new Inventory("Escargot" , "Main course" , "Fancy delicious snails", 50.99));
 		ogInventory = GroceryFileUtil.readFile();
 		
-		
-		
-		
 		//Start program
-		
-		//do {
-		//Start shopping
-		
+		do {
 			System.out.println("Welcome to JBS Gourmet Gorocery!");
 			printInventory(ogInventory);
-			printMenu();
-			choice = Validator.getStringMatchingRegex(scan,"What would you like to do next (a-d)? ", "[a-dA-D]");
 			
-			switch(choice.toLowerCase())
-			{
-				case "a": addToCart(scan, ogInventory, cart, cartQuantity);
-					break;
-				case "b": printCart(ogInventory, cart, cartQuantity);
-					break;
-				case "c": printInventory(ogInventory);
-					break;
-				case "d": checkout(scan, ogInventory, cart, cartQuantity);
-					break;
-				default:
-					break;
-			}
+			//clear cart for new transaction
+			cart.clear();
+			cartQuantity.clear();
+			
+			do {
+				//Start shopping
+				printMenu();
+				choice = Validator.getStringMatchingRegex(scan,"What would you like to do next (a-d)? ", "[a-dA-D]");
+				
+				switch(choice.toLowerCase())
+				{
+					case "a": addToCart(scan, ogInventory, cart, cartQuantity);
+						break;
+					case "b": printCart(ogInventory, cart, cartQuantity);
+						break;
+					case "c": printInventory(ogInventory);
+						break;
+					case "d": checkout(scan, ogInventory, cart, cartQuantity);
+						break;
+					default:
+						break;
+				}
+				
+				isShopping = choice;
+				
+			} while (!isShopping.matches("[dD].*"));
+			
+			System.out.println("Thank you for shopping with us!");
+			
+			appRestart = Validator.getStringMatchingRegex(scan, "Would you like to shop with us again?", "[yY].*");
 			
 			
-		//add cart
+		}while(appRestart.matches("[yY].*"));
 		
-		//finish shopping? update loop
+		System.out.println("Goodbye. Come again!");
 		
-		//subtotal, tax, grand total print
-		
-		//get type of payment
-		
-		//give change if applicable
-		
-		//print receipt to file
-		
-		//shop again? loop update
-			
-			
-			
-			
-		//} while (//restartApp loop);
 	}
 	
 
 	private static void printCart(List<Inventory> ogInventory, ArrayList<Integer>cart ,ArrayList<Integer>cartQuantity){
 	
 		int count = 0;
+		System.out.println();
 		
+		System.out.println("Item \t\t   Quantity \t Price Per Item");
+		System.out.println("");
+
 		for (int b : cart) {
-			System.out.println(ogInventory.get(b).getName());
-			System.out.println(ogInventory.get(b).getPrice());
-			System.out.println(cartQuantity.get(count++));
+			System.out.printf("%s %s %s %s%.2f\n", ogInventory.get(b).getName() ,"\t\t x", cartQuantity.get(count++) ,"\t $", ogInventory.get(b).getPrice());
+			System.out.println();
+			System.out.println();
 		}
 	}
 
@@ -146,20 +145,27 @@ public class JBSGroceryApp {
 		String checkNum = null;
 		
 		//print initial list so user knows list. Calculates total tax and grand total.
+		System.out.println();
+
 		System.out.println("JBS Gourmet Grocery Receipt");
-		System.out.println("Item/t/t/tQuantity/t/t/tCost Per");
+		System.out.println("Item \t\t   Quantity \t Price Per Item");
 		System.out.println("*********************************************");
 		for (int i =0; i<list2.size(); i++) {
-			System.out.println(list1.get(i).getName() + "/t/t/t" + list3.get(i) + "/t/t/t" + list1.get(i).getPrice());
-			sum = (list3.get(i) * list1.get(i).getPrice()) + sum;			
+			System.out.println(list1.get((list2.get(i))).getName()  +"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());
+			sum = (list3.get(i) * list1.get((list2.get(i))).getPrice()) + sum;			
 		}
 		tax = sum * .06;
 		grandTotal = tax + sum;
 		
+		grandTotal = (double)Math.round(grandTotal * 100d) / 100d;
+	
+		
+		System.out.println();
+
 		//prints out results
-		System.out.println("/t/t/t/t/t/t/t Total: $" + sum );
-		System.out.println("/t/t/t/t/t/t/t Tax: $" + tax );
-		System.out.println("/t/t/t/t/t/t/t Grand Total: $" + grandTotal );
+		System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
+		System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
+		System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
 		
 		System.out.println("*********************************************");
 		
@@ -178,20 +184,22 @@ public class JBSGroceryApp {
 				System.out.println("Your final receipt:");
 				System.out.println("*********************************************");
 				System.out.println("JBS Gourmet Grocery Receipt");
-				System.out.println("Item/t/t/tQuantity/t/t/tCost Per");
+				System.out.println("Item \t\t   Quantity \t Price Per Item");
 				System.out.println("*********************************************");
 				
-				for (int j =0; j<list2.size(); j++) {
-					
-					System.out.println(list1.get(j).getName() + "/t/t/t" + list3.get(j) + "/t/t/t" + list1.get(j).getPrice());
-					sum = (list3.get(j) * list1.get(j).getPrice()) + sum;			
-				}
+				for (int i =0; i<list2.size(); i++) {
+					System.out.println(list1.get((list2.get(i))).getName()  
+							+"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());		
+					}
 				
-				System.out.println("/t/t/t/t/t/t/t Total: $" + sum );
-				System.out.println("/t/t/t/t/t/t/t Tax: $" + tax );
-				System.out.println("/t/t/t/t/t/t/t Grand Total: $" + grandTotal );
-				System.out.println("/t/t/t/t/t/t/t Amount Tendered: $" + collect );
-				System.out.println("/t/t/t/t/t/t/t Change: $" + change );
+				System.out.println();
+
+				
+				System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
+				System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
+				System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
+				System.out.printf("%-32s %s%.2f\n", "Amount Tendered:", "$" , collect );
+				System.out.printf("%-32s %s%.2f\n", "Change:", "$" , change );
 				payCheck = false;
 				
 			//credit option
@@ -202,19 +210,20 @@ public class JBSGroceryApp {
 				System.out.println("Your final receipt:");
 				System.out.println("*********************************************");
 				System.out.println("JBS Gourmet Grocery Receipt");
-				System.out.println("Item/t/t/tQuantity/t/t/tCost Per");
+				System.out.println("Item \t\t   Quantity \t Price Per Item");
 				System.out.println("*********************************************");
 				
-				for (int j =0; j<list2.size(); j++) {
-					
-					System.out.println(list1.get(j).getName() + "/t/t/t" + list3.get(j) + "/t/t/t" + list1.get(j).getPrice());
-					sum = (list3.get(j) * list1.get(j).getPrice()) + sum;			
-				}
+				for (int i =0; i<list2.size(); i++) {
+					System.out.println(list1.get((list2.get(i))).getName()  
+							+"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());			
+					}
 				
-				System.out.println("/t/t/t/t/t/t/t Total: $" + sum );
-				System.out.println("/t/t/t/t/t/t/t Tax: $" + tax );
-				System.out.println("/t/t/t/t/t/t/t Grand Total: $" + grandTotal );
-				System.out.println("/t/t/t/ Charged to card: " + cardNum );
+				System.out.println();
+
+				System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
+				System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
+				System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
+				System.out.printf("%-25s %s\n", "Charged to card: " , cardNum );
 				
 				
 				payCheck = false;
@@ -227,19 +236,20 @@ public class JBSGroceryApp {
 				System.out.println("Your final receipt:");
 				System.out.println("*********************************************");
 				System.out.println("JBS Gourmet Grocery Receipt");
-				System.out.println("Item/t/t/tQuantity/t/t/tCost Per");
+				System.out.println("Item \t\t   Quantity \t Price Per Item");
 				System.out.println("*********************************************");
 				
-				for (int j =0; j<list2.size(); j++) {
-					
-					System.out.println(list1.get(j).getName() + "/t/t/t" + list3.get(j) + "/t/t/t" + list1.get(j).getPrice());
-					sum = (list3.get(j) * list1.get(j).getPrice()) + sum;			
+				for (int i =0; i<list2.size(); i++) {
+					System.out.println(list1.get((list2.get(i))).getName()  
+							+"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());		
 				}
 				
-				System.out.println("/t/t/t/t/t/t/t Total: $" + sum );
-				System.out.println("/t/t/t/t/t/t/t Tax: $" + tax );
-				System.out.println("/t/t/t/t/t/t/t Grand Total: $" + grandTotal );
-				System.out.println("/t/t/t/ Charged to check number: " + checkNum );
+				System.out.println();
+				
+				System.out.printf("%-31s %s%f\n", "Total:", "$" , sum );
+				System.out.printf("%-31s %s%f\n","Tax:",  "$", tax );
+				System.out.printf("%-31s %s%f\n","Grand Total:", "$" , grandTotal );
+				System.out.printf("%-31s %s\n","Charged to check number: " , checkNum );
 				
 				payCheck = false;
 				
