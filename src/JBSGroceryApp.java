@@ -1,5 +1,5 @@
 /*Jasmine Allen, Brian Seyferth, Sharde Smith
- * Program: User can buy items for store
+ * Program: User can buy items from store and simulate a transaction.
  * August 3, 2018
  */
 
