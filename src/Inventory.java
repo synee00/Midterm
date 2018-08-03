@@ -53,7 +53,10 @@ public class Inventory {
 
 	@Override
 	public String toString() {
-		return "Inventory [name=" + name + ", category=" + category + ", description=" + description + ", price="
-				+ price + "]";
+		
+		String firstLine = String.format("%-20s %s ", name, price);
+		String secondLine = String.format("%-5s %s", "\n ", description);
+		
+		return firstLine + secondLine;
 	}
 }

@@ -34,7 +34,7 @@ public class JBSGroceryApp {
 			
 			switch(choice.toLowerCase())
 			{
-				case "a": addInventory();
+				case "a": addToCart(scan, ogInventory, cart, cartQuantity);
 					break;
 				case "b": printCart();
 					break;
@@ -72,24 +72,53 @@ public class JBSGroceryApp {
 		
 	}
 
-	private static void addInventory() {
-		// TODO Auto-generated method stub
+	private static void addToCart(Scanner scan, List<Inventory> ogInventory, ArrayList<Integer> cart, ArrayList<Integer> cartQuantity) {
+		
+		int choice = Validator.getInt(scan, 
+				"Which item would you like to order (1-12)? ", 1, 12);
+		int quantity = Validator.getInt(scan, 
+				"How many would you like? ", 1, 99);
+		System.out.println();
+		
+		//add item index to cart
+		cart.add(choice-1);
+		//add the amount to cart
+		cartQuantity.add(quantity);
+		
+		System.out.println("Added to cart!");
 		
 	}
 
-	public static void printInventory(List<Inventory> item) {
+	public static void printInventory(List<Inventory> item) {	
+		int count = 1;
+		String[] category = {"Appetizer", "Main course", "Dessert", "Drink"};
+		int catIndex = 0;
 		
 		for (Inventory a: item) {
-			System.out.println(a);
+			
+			if(category[catIndex].equalsIgnoreCase(a.getCategory()))
+			{
+				System.out.println();
+				System.out.println(category[catIndex]);
+				System.out.println();
+				catIndex++;
+			}
+			
+			System.out.println(count + ". " + a);
+			count++;
 		}	
+		System.out.println();
 	}
 	
 	private static void printMenu() {
 
-		System.out.println("a.) \tAdd to cart  \n"
-				+ "b.) \tShow me my cart! \n"
-				+ "c.) \tShow me your items! \n"
-				+ "d.) \tI want to checkout! \n");
+		System.out.println("╔=========================================╗");
+		System.out.println("\ta.) \tAdd to cart  \n"
+				+ "\tb.) \tShow me my cart! \n"
+				+ "\tc.) \tShow me your items! \n"
+				+ "\td.) \tI want to checkout! ");
+		
+		System.out.println("╚=========================================╝");
 	}
 	
 	
