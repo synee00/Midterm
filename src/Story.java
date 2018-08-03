@@ -11,6 +11,8 @@ public class Story {
 		
 		
 		System.out.println("They had only one guiding principle in life \"Hakuna-mata\"!");
+		
+		System.out.println("");
 	}
 
 }

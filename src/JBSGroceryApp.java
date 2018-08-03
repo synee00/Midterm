@@ -1,6 +1,9 @@
 import java.util.*;
-
+import java.util.List;
 public class JBSGroceryApp {
+
+	private static String format;
+
 
 	public static void main(String[] args) {
 		//Create new array lift for inventory 
@@ -36,7 +39,7 @@ public class JBSGroceryApp {
 			{
 				case "a": addToCart(scan, ogInventory, cart, cartQuantity);
 					break;
-				case "b": printCart();
+				case "b": printCart(ogInventory, cart, cartQuantity);
 					break;
 				case "c": printInventory(ogInventory);
 					break;
@@ -66,10 +69,17 @@ public class JBSGroceryApp {
 			
 		//} while (//restartApp loop);
 	}
+	
 
-	private static void printCart() {
-		// TODO Auto-generated method stub
+	private static void printCart(List<Inventory> ogInventory, ArrayList<Integer>cart ,ArrayList<Integer>cartQuantity){
+	
+		int count = 0;
 		
+		for (int b : cart) {
+			System.out.println(ogInventory.get(b).getName());
+			System.out.println(ogInventory.get(b).getPrice());
+			System.out.println(cartQuantity.get(count++));
+		}
 	}
 
 	private static void addToCart(Scanner scan, List<Inventory> ogInventory, ArrayList<Integer> cart, ArrayList<Integer> cartQuantity) {
