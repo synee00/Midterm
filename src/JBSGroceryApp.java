@@ -56,7 +56,7 @@ public class JBSGroceryApp {
 			
 			System.out.println("Thank you for shopping with us!");
 			
-			appRestart = Validator.getStringMatchingRegex(scan, "Would you like to shop with us again?", "[yY].*");
+			appRestart = Validator.getStringMatchingRegex(scan, "Would you like to shop with us again?", "[a-z, A-Z].*");
 			
 			
 		}while(appRestart.matches("[yY].*"));
@@ -71,11 +71,11 @@ public class JBSGroceryApp {
 		int count = 0;
 		System.out.println();
 		
-		System.out.println("Item \t\t   Quantity \t Price Per Item");
+		System.out.printf("%-32s %-6s        %s\n","Item", "Quantity", "Price Per Item");
 		System.out.println("");
 
 		for (int b : cart) {
-			System.out.printf("%s %s %s %s%.2f\n", ogInventory.get(b).getName() ,"\t\t x", cartQuantity.get(count++) ,"\t $", ogInventory.get(b).getPrice());
+			System.out.printf("%-32s %s %s    %s%.2f\n", ogInventory.get(b).getName() ,"x", cartQuantity.get(count++) ,"\t $", ogInventory.get(b).getPrice());
 			System.out.println();
 			System.out.println();
 		}
@@ -148,10 +148,10 @@ public class JBSGroceryApp {
 		System.out.println();
 
 		System.out.println("JBS Gourmet Grocery Receipt");
-		System.out.println("Item \t\t   Quantity \t Price Per Item");
-		System.out.println("*********************************************");
+		System.out.printf("%-32s %-6s        %s\n","Item", "Quantity", "Price Per Item");
+		System.out.println("***************************************************************");
 		for (int i =0; i<list2.size(); i++) {
-			System.out.println(list1.get((list2.get(i))).getName()  +"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());
+			System.out.printf("%-32s %s %s    %s%.2f\n",list1.get((list2.get(i))).getName(), "x", list3.get(i), "\t $", list1.get((list2.get(i))).getPrice());
 			sum = (list3.get(i) * list1.get((list2.get(i))).getPrice()) + sum;			
 		}
 		tax = sum * .06;
@@ -161,104 +161,109 @@ public class JBSGroceryApp {
 	
 		
 		System.out.println();
+		
+		if (grandTotal > 0) {
 
-		//prints out results
-		System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
-		System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
-		System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
-		
-		System.out.println("*********************************************");
-		
-		//collects the payment method and validates it exists
-		System.out.println("How would you like to pay? (cash, credit, check)");
-		payType = scnr.nextLine();
-		
-		//while loop sets up a non response in in the loop.
-		while (payCheck == true) {
+			//prints out results
+			System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
+			System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
+			System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
 			
-			//cash option
-			if (payType.equals("cash")) {
-				collect = Validator.getDouble(scnr, "How much cash do you have? (0.00 format)", grandTotal, 1e9);
-				change = collect - grandTotal;
+			System.out.println("***************************************************************");
+			
+			//collects the payment method and validates it exists
+			System.out.println("How would you like to pay? (cash, credit, check)");
+			payType = scnr.nextLine();
+			
+			//while loop sets up a non response in in the loop.
+			while (payCheck == true) {
 				
-				System.out.println("Your final receipt:");
-				System.out.println("*********************************************");
-				System.out.println("JBS Gourmet Grocery Receipt");
-				System.out.println("Item \t\t   Quantity \t Price Per Item");
-				System.out.println("*********************************************");
-				
-				for (int i =0; i<list2.size(); i++) {
-					System.out.println(list1.get((list2.get(i))).getName()  
-							+"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());		
-					}
-				
-				System.out.println();
-
-				
-				System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
-				System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
-				System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
-				System.out.printf("%-32s %s%.2f\n", "Amount Tendered:", "$" , collect );
-				System.out.printf("%-32s %s%.2f\n", "Change:", "$" , change );
-				payCheck = false;
-				
-			//credit option
-			} else if (payType.equals("credit")) {
-				
-				cardNum = Validator.getStringMatchingRegex(scnr,"Please enter the card number. (#### #### #### ####)","[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}");
-						
-				System.out.println("Your final receipt:");
-				System.out.println("*********************************************");
-				System.out.println("JBS Gourmet Grocery Receipt");
-				System.out.println("Item \t\t   Quantity \t Price Per Item");
-				System.out.println("*********************************************");
-				
-				for (int i =0; i<list2.size(); i++) {
-					System.out.println(list1.get((list2.get(i))).getName()  
-							+"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());			
-					}
-				
-				System.out.println();
-
-				System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
-				System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
-				System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
-				System.out.printf("%-25s %s\n", "Charged to card: " , cardNum );
-				
-				
-				payCheck = false;
-				
-			//check option
-			} else if (payType.equals("check")) {
-				
-				checkNum = Validator.getStringMatchingRegex(scnr,"Please enter the check number. ()","[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}");
-				
-				System.out.println("Your final receipt:");
-				System.out.println("*********************************************");
-				System.out.println("JBS Gourmet Grocery Receipt");
-				System.out.println("Item \t\t   Quantity \t Price Per Item");
-				System.out.println("*********************************************");
-				
-				for (int i =0; i<list2.size(); i++) {
-					System.out.println(list1.get((list2.get(i))).getName()  
-							+"\t\t x"+ list3.get(i)  +"\t $"+ list1.get(i).getPrice());		
-				}
-				
-				System.out.println();
-				
-				System.out.printf("%-31s %s%f\n", "Total:", "$" , sum );
-				System.out.printf("%-31s %s%f\n","Tax:",  "$", tax );
-				System.out.printf("%-31s %s%f\n","Grand Total:", "$" , grandTotal );
-				System.out.printf("%-31s %s\n","Charged to check number: " , checkNum );
-				
-				payCheck = false;
-				
-			//if the payment method doesnt match
-			} else {
-				System.out.println("Please try your response again.");
-				payCheck = true;
-			}
+				//cash option
+				if (payType.equals("cash")) {
+					collect = Validator.getDouble(scnr, "How much cash do you have? (0.00 format)", grandTotal, 1e9);
+					change = collect - grandTotal;
+					
+					System.out.println("Your final receipt:");
+					System.out.println("***************************************************************");
+					System.out.println("JBS Gourmet Grocery Receipt");
+					System.out.printf("%-32s %-6s        %s\n","Item", "Quantity", "Price Per Item");
+					System.out.println("***************************************************************");
+					
+					for (int i =0; i<list2.size(); i++) {
+						System.out.printf("%-32s %s %s    %s%.2f\n",list1.get((list2.get(i))).getName(), "x", list3.get(i), "\t $", list1.get((list2.get(i))).getPrice());
 		
+						}
+					
+					System.out.println();
+	
+					
+					System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
+					System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
+					System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
+					System.out.printf("%-32s %s%.2f\n", "Amount Tendered:", "$" , collect );
+					System.out.printf("%-32s %s%.2f\n", "Change:", "$" , change );
+					payCheck = false;
+					
+				//credit option
+				} else if (payType.equals("credit")) {
+					
+					cardNum = Validator.getStringMatchingRegex(scnr,"Please enter the card number. (#### #### #### #### MM/YY  ###)","[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{2}/[0-9]{2} [0-9]{3}");
+							
+					System.out.println("Your final receipt:");
+					System.out.println("***************************************************************");
+					System.out.println("JBS Gourmet Grocery Receipt");
+					System.out.printf("%-32s %-6s        %s\n","Item", "Quantity", "Price Per Item");
+					System.out.println("***************************************************************");
+					
+					for (int i =0; i<list2.size(); i++) {
+						System.out.printf("%-32s %s %s    %s%.2f\n",list1.get((list2.get(i))).getName(), "x", list3.get(i), "\t $", list1.get((list2.get(i))).getPrice());
+			
+						}
+					
+					System.out.println();
+	
+					System.out.printf("%-32s %s%.2f\n", "Total:", "$" , sum );
+					System.out.printf("%-32s %s%.2f\n","Tax:",  "$", tax );
+					System.out.printf("%-32s %s%.2f\n","Grand Total:", "$" , grandTotal );
+					System.out.printf("%-25s %s\n", "Charged to card: " , cardNum );
+					
+					
+					payCheck = false;
+					
+				//check option
+				} else if (payType.equals("check")) {
+					
+					checkNum = Validator.getStringMatchingRegex(scnr,"Please enter the check number. (####)","[0-9]{4}");
+					
+					System.out.println("Your final receipt:");
+					System.out.println("***************************************************************");
+					System.out.println("JBS Gourmet Grocery Receipt");
+					System.out.printf("%-32s %-6s        %s\n","Item", "Quantity", "Price Per Item");
+					System.out.println("***************************************************************");
+					
+					for (int i =0; i<list2.size(); i++) {
+						System.out.printf("%-32s %s %s    %s%.2f\n",list1.get((list2.get(i))).getName(), "x", list3.get(i), "\t $", list1.get((list2.get(i))).getPrice());
+		
+					}
+					
+					System.out.println();
+					
+					System.out.printf("%-31s %s%f\n", "Total:", "$" , sum );
+					System.out.printf("%-31s %s%f\n","Tax:",  "$", tax );
+					System.out.printf("%-31s %s%f\n","Grand Total:", "$" , grandTotal );
+					System.out.printf("%-31s %s\n","Charged to check number: " , checkNum );
+					
+					payCheck = false;
+					
+				//if the payment method doesnt match
+				} else {
+					System.out.println("Please try your response again.");
+					payCheck = true;
+				}
+			
+			}
+		} else {
+			System.out.println("Your cart is empty.");
 		}
 		
 		
