@@ -273,9 +273,9 @@ public class JBSGroceryApp {
 						System.out.printf("%-32s %s %s    %s%.2f\n",list1.get((list2.get(i))).getName(), "x", list3.get(i), "\t $", list1.get((list2.get(i))).getPrice());
 					}
 					System.out.println();
-					System.out.printf("%-31s %s%f\n", "Total:", "$" , sum );
-					System.out.printf("%-31s %s%f\n","Tax:",  "$", tax );
-					System.out.printf("%-31s %s%f\n","Grand Total:", "$" , grandTotal );
+					System.out.printf("%-31s %s%.2f\n", "Total:", "$" , sum );
+					System.out.printf("%-31s %s%.2f\n","Tax:",  "$", tax );
+					System.out.printf("%-31s %s%.2f\n","Grand Total:", "$" , grandTotal );
 					System.out.printf("%-31s %s\n","Charged to check number: " , checkNum );
 					payCheck = false;
 					
