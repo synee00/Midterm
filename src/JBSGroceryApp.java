@@ -154,6 +154,7 @@ public class JBSGroceryApp {
 		String cardNum = null;
 		String cardExp = null;
 		String cardCvv = null;
+		String collect1 = null;
 		boolean cardExp1 = true;
 		String checkNum = null;
 		
@@ -197,10 +198,16 @@ public class JBSGroceryApp {
 				//cash option
 				if (payType.equals("cash")) {
 					
-					//collects amount from customer and calculates change
-					collect = Validator.getDouble(scnr, "How much cash do you have? (0.00 format)", grandTotal, 1e9);
-					
+					//collects amount from customer, validates it is correct format, and calculates change
+					do {
+					collect1 = Validator.getStringMatchingRegex(scnr, "How much cash do you have? (0.00 format)", "([\\d]*)\\.([\\d]{2})");
+					collect = Double.parseDouble(collect1);
 					change = collect - grandTotal;
+					if (collect < grandTotal) {
+						System.out.println("You must have enough to cover the Grand Total.");
+						}
+					} while (collect < grandTotal);
+					
 					
 					//prints the final receipt
 					System.out.println("Your final receipt:");
