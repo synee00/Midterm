@@ -142,6 +142,9 @@ public class JBSGroceryApp {
 		boolean payCheck = true;
 		double collect = 0;
 		String cardNum = null;
+		String cardExp = null;
+		String cardCvv = null;
+		boolean cardExp1 = true;
 		String checkNum = null;
 		
 		//print initial list so user knows list. Calculates total tax and grand total.
@@ -207,8 +210,17 @@ public class JBSGroceryApp {
 				//credit option
 				} else if (payType.equals("credit")) {
 					
-					cardNum = Validator.getStringMatchingRegex(scnr,"Please enter the card number. (#### #### #### #### MM/YY  ###)","[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{2}/[0-9]{2} [0-9]{3}");
-							
+					cardNum = Validator.getStringMatchingRegex(scnr,"Please enter the card number. (#### #### #### ####)","[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}");
+					
+					do {
+					cardExp = Validator.getStringMatchingRegex(scnr, "Please enter the card expirtion date. (MMYY)", "[0-9]{4}");
+					cardExp1 = Validator.isValidExpiration(cardExp);
+					
+					} while (cardExp1 == false);
+					
+					cardCvv = Validator.getStringMatchingRegex(scnr, "Please enter the 3 digit passcode on the back of the card. (###)", "[0-9]{3}");
+					
+					
 					System.out.println("Your final receipt:");
 					System.out.println("***************************************************************");
 					System.out.println("JBS Gourmet Grocery Receipt");

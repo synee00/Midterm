@@ -145,5 +145,31 @@ public class Validator {
 		} while (!isValid);
 		return date;
 	}
+	
+	
+	public static boolean isValidExpiration(String s) {
+
+	    // use SimpleDateFormat to parse values like '0609' as date 'June 2009'
+	    java.text.DateFormat sdf = new java.text.SimpleDateFormat("MMyy");
+	    
+	    // establish current date as last day of previous month at 23:59:59
+	    java.util.Calendar now = java.util.Calendar.getInstance(); 
+	    now.set(now.get(java.util.Calendar.YEAR), now.get(java.util.Calendar.MONTH), 0, 23, 59, 59);
+
+	    try {
+	        // actual parsing of the date, wrapped in try/catch 
+	        // parses as 1st day of month at midnight since only providing month and year
+	        // e.g., '0609' becomes 'June 01, 2009 00:00:00'
+	        java.util.Date exp = sdf.parse(s);
+
+	        // if parsed date is before current month, then return invalid!
+	        if (exp.before(now.getTime())) return false;
+	    } catch (java.text.ParseException e) {
+	        return false;  // if not MMYY then reject
+	    }
+
+	    // valid if made it this far, can do in reverse by using !exp.before and return true above.
+	    return true; 
+	}
 
 }
